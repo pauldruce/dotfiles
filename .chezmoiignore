@@ -1,0 +1,13 @@
+# Chezmoi ignore list
+# Files in this list are tracked in the Git repository but NOT installed into $HOME
+
+README.md
+AGENTS.md
+.gitignore
+.DS_Store
+
+# Windows PowerShell profile paths (only apply on Windows)
+{{- if ne .chezmoi.os "windows" }}
+Documents/PowerShell/**
+Documents/WindowsPowerShell/**
+{{- end }}

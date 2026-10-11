@@ -1,0 +1,12 @@
+[tools]
+"aqua:terrastruct/d2" = "latest"
+bat = "latest"
+bottom = "latest"
+chezmoi = "latest"
+eza = "latest"
+fd = "latest"
+k9s = "latest"
+lazygit = "latest"
+node = "24"
+python = "3.12"
+ripgrep = "latest"

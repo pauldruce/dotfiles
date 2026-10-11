@@ -1,0 +1,135 @@
+# ==============================================================================
+# Modern Native Zsh Configuration
+# Managed by chezmoi (cross-platform for macOS, Linux, and Raspberry Pi)
+# ==============================================================================
+
+# --- PATH Configuration ---
+export PATH="$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:$PATH"
+export PATH="$PATH:$HOME/go/bin:$HOME/.emacs.d/bin"
+
+{{ if eq .chezmoi.os "darwin" -}}
+# macOS Specific Paths
+export PATH="/usr/local/opt/ccache/libexec:$PATH"
+
+if [ -d "/usr/local/opt/grep/libexec/gnubin" ]; then
+  PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
+fi
+{{- else if eq .chezmoi.os "linux" -}}
+# Linux / Raspberry Pi Specific Paths
+if [ -d "/home/linuxbrew/.linuxbrew/bin" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+{{- end }}
+
+# --- Activate mise First (CLI Tools & Toolchains) ---
+if [ -x "$HOME/.local/bin/mise" ]; then
+  eval "$("$HOME/.local/bin/mise" activate zsh)"
+elif command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
+
+# --- History Configuration ---
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt EXTENDED_HISTORY          # Write timestamps and execution duration to history
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming
+setopt HIST_IGNORE_DUPS          # Don't record duplicate consecutive commands
+setopt HIST_IGNORE_SPACE         # Don't record commands starting with space
+setopt HIST_FIND_NO_DUPS         # Skip duplicate commands when scrolling history
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in history file
+setopt SHARE_HISTORY             # Share command history across open terminals
+
+# --- Directory Navigation & Globbing ---
+setopt AUTO_CD                   # Type directory name to cd into it
+setopt EXTENDED_GLOB             # Advanced glob patterns (#, ~, ^)
+setopt NO_NOMATCH                # Don't error out if glob pattern finds no match
+
+# --- Fast Completion System (<15ms) ---
+autoload -Uz compinit
+# Only re-dump compinit once a day
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive completion
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"     # Colorize completions
+
+# --- Modern CLI Aliases (eza, bat, ripgrep) ---
+if command -v eza >/dev/null 2>&1; then
+  alias ls="eza --icons"
+  alias ll="eza -lh --icons --git"
+  alias la="eza -lha --icons --git"
+  alias tree="eza --tree --icons"
+else
+  alias ll="ls -lh"
+  alias la="ls -lha"
+fi
+
+if command -v bat >/dev/null 2>&1; then
+  alias cat="bat --paging=never"
+fi
+
+# --- Workflow Shortcuts (Mise, Tools) ---
+alias mr="mise run"
+alias mt="mise run test"
+alias mx="mise exec"
+alias k="kubectl"
+alias emacs="emacs -nw"
+
+# --- Git Aliases (Tailored to your workflow) ---
+alias g='git'
+alias lg='lazygit'
+alias gfa='git fetch --all --prune'
+alias gsw='git switch'
+alias gswc='git switch -c'
+alias glol="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'"
+alias ga='git add'
+alias gaa='git add --all'
+alias gc='git commit -v'
+alias gcmsg='git commit -m'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gl='git pull'
+
+
+# --- Modern Navigation & Fuzzy Finder ---
+# fzf (Ctrl-R history search, Ctrl-T file finder)
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
+
+# zoxide (Smart directory jumping via 'z')
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
+# --- Standalone Plugins (Looks in ~/.zsh/plugins and standard Linux distro paths) ---
+# zsh-autosuggestions
+if [ -f "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+  source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+elif [ -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+  source "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+fi
+
+# zsh-syntax-highlighting (Must be sourced near the end)
+if [ -f "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+  source "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+elif [ -f "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+  source "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
+
+# --- Prompt (Starship) ---
+if [ -x "$HOME/.local/bin/starship" ]; then
+  eval "$("$HOME/.local/bin/starship" init zsh)"
+elif command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+# --- Local Machine Escape Hatch ---
+# Load uncommitted local settings, project shortcuts, private tokens if present
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

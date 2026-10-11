@@ -1,0 +1,5 @@
+# Git ignore list for chezmoi source repo
+.DS_Store
+*.swp
+*~
+.chezmoidata.toml

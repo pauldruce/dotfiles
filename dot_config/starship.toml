@@ -1,0 +1,70 @@
+# Starship configuration (~/.config/starship.toml)
+# Documentation: https://starship.rs/config/
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# A clean, fast 2-line prompt format
+format = """
+$directory$git_branch$git_status$python$cmd_duration
+$character"""
+
+# Timeout for commands executed by starship (in ms)
+command_timeout = 500
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold yellow)"
+
+[directory]
+truncation_length = 4
+truncation_symbol = "…/"
+style = "bold cyan"
+read_only = " 󰌾"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+format = '([$all_status$ahead_behind]($style))'
+conflicted = "[~${count}](bold red) "
+ahead = "[⇡${count}](bold green) "
+behind = "[⇣${count}](bold red) "
+diverged = "[⇕⇡${ahead_count}⇣${behind_count}](bold purple) "
+untracked = "[?${count}](bold 214) "   # Orange-yellow for new/untracked files
+modified = "[!${count}](bold 208) "    # Vivid orange for modified files
+staged = "[+${count}](bold green) "    # Green for staged files
+renamed = "[»${count}](bold yellow) "
+deleted = "[-${count}](bold red) "     # Red for deleted files
+stashed = "[*${count}](bold cyan) "
+
+[cmd_duration]
+min_time = 2_000
+format = "took [$duration](bold yellow) "
+
+[package]
+disabled = true
+
+# Disabled language modules to keep prompt uncluttered
+[ruby]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[golang]
+disabled = true
+
+[rust]
+disabled = true
+
+# Only show Python when an explicit virtual environment is active
+[python]
+detect_extensions = []
+detect_files = []
+detect_folders = []
+symbol = "🐍 "
+format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'

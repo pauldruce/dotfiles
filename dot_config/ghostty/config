@@ -1,0 +1,20 @@
+# Ghostty Configuration (~/.config/ghostty/config)
+# Documentation: https://ghostty.org/docs/config/reference
+
+# Theme & Appearance
+theme = dark:catppuccin-mocha,light:catppuccin-latte
+
+# Typography (Uses Nerd Font glyphs if available, falls back gracefully)
+font-size = 14
+adjust-cell-height = 15%
+
+# Window styling & Padding
+window-padding-x = 14
+window-padding-y = 14
+macos-titlebar-style = tabs
+window-inherit-working-directory = true
+
+# Interaction
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+scrollback-limit = 100000
