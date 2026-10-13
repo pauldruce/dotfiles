@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+allowed_email="30435358+pauldruce@users.noreply.github.com"
+denylist="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/denylist"
+
+fail() {
+  printf 'pre-commit: %s\n' "$1" >&2
+  exit 1
+}
+
+author_email="$(git var GIT_AUTHOR_IDENT | sed -E 's/.*<([^>]*)>.*/\1/')"
+[[ "$author_email" == "$allowed_email" ]] ||
+  fail "author email is $author_email, expected $allowed_email"
+
+if [[ -e "$denylist" ]]; then
+  patterns="$(rg -v '^\s*(#|$)' "$denylist")" || fail "cannot read any patterns from $denylist"
+  if matches="$(git diff --cached -U0 --no-color | rg '^\+' | rg -i -f <(printf '%s\n' "$patterns"))"; then
+    printf '%s\n' "$matches" >&2
+    fail "the staged lines above match a pattern in $denylist"
+  fi
+fi
+
+mise run scan || fail "trivy found a secret"

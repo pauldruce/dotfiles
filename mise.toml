@@ -1,0 +1,15 @@
+[tools]
+shellcheck = "latest"
+trivy = "latest"
+
+[tasks.setup]
+description = "Turn on the repo's git hooks"
+run = "git config core.hooksPath .githooks"
+
+[tasks.lint]
+description = "Run shellcheck on the git hooks"
+run = "shellcheck .githooks/*"
+
+[tasks.scan]
+description = "Scan the repo for leaked secrets with trivy"
+run = "trivy fs --scanners secret --exit-code 1 --no-progress --quiet ."

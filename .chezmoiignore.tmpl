@@ -3,11 +3,21 @@
 
 README.md
 AGENTS.md
+mise.toml
 .gitignore
 .DS_Store
 
+# Machine-local overrides: never tracked, so chezmoi add refuses them
+.zshrc.local
+.gitconfig.local
+.agents/AGENTS.local.md
+.config/mise/conf.d
+.config/mise/conf.d/**
+.config/dotfiles
+.config/dotfiles/**
+
 # Windows PowerShell profile paths (only apply on Windows)
 {{- if ne .chezmoi.os "windows" }}
-Documents/PowerShell/**
-Documents/WindowsPowerShell/**
+Documents
+Documents/**
 {{- end }}
