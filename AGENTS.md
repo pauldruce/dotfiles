@@ -33,8 +33,25 @@ This repository manages personal developer dotfiles across macOS, Linux (Raspber
 - Keep machine-specific or private configurations in uncommitted local files:
   - Zsh: `~/.zshrc.local` (automatically sourced by `dot_zshrc.tmpl`)
   - Git: `~/.gitconfig.local` (automatically included by `dot_gitconfig`)
-- Ensure all repository-level docs, swap files, and temporary files remain listed in `.chezmoiignore`.
+  - Agent rules: `~/.agents/AGENTS.local.md` (appended by `.chezmoitemplates/AGENTS.md.tmpl`)
+  - mise tools: `~/.config/mise/conf.d/*.toml`
+- Ensure all repository-level docs, swap files, temporary files, and the local files above remain listed in `.chezmoiignore.tmpl`.
+- Never bypass the pre-commit hook with `--no-verify`.
 
 ### 4. Search & Command Execution
 - Always use `rg` (ripgrep) instead of `grep`.
 - Always use `fd` instead of `find`.
+
+### 5. Agent Configuration
+- `.chezmoitemplates/AGENTS.md.tmpl` is the one source for the global agent rules.
+  `dot_claude/CLAUDE.md.tmpl` and `private_dot_codex/AGENTS.md.tmpl` render it.
+- Skills live in `dot_agents/skills/<name>/SKILL.md`.
+  Each `dot_claude/private_skills/<name>/SKILL.md.tmpl` includes the matching file.
+- Never use the `exact_` prefix on a skills directory.
+  Other tools install their own skills there.
+
+### 6. Templates
+- Give each template file the `.tmpl` suffix, including each file in `.chezmoitemplates/` and `.chezmoiignore.tmpl`.
+  chezmoi 2.73.0 reads `.chezmoiignore.tmpl`, and `.chezmoiversion` stops an older chezmoi, which would skip the file without a warning.
+- Do not add `.tmpl` to a file that only shows template syntax as an example, for example `dot_gemini/config/skills/chezmoi-dotfiles/SKILL.md`.
+  chezmoi would run the example and fail.
