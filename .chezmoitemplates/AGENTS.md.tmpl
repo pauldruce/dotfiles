@@ -1,0 +1,75 @@
+# Agent Guidelines
+
+## Problem-Solving Approach
+- **Plan before acting** - Understand the problem fully before proposing solutions
+- **Root cause analysis** - Identify why issues occur, not just symptoms
+- **Familiarise with the codebase** - Study existing patterns, styles, and conventions before making changes
+- **Keep PRs small and focused** - When working on a branch, keep the changes focused on a single issue or feature.
+
+## Code Style
+- **Remove all comments** - The default is to remove all comments, all the time; a well-written file has no comments. Load the `writing-comments` skill when you add or update a comment. First make the code say it through a name, a value, or a structure. Keep a comment only in the rare case the skill allows, and only to explain why the code exists in that form, never what it does.
+- **Follow existing conventions** - Match the style already present in the codebase
+- **Before writing a new file**, read 2-3 existing files in the same package. Match their comment style, naming conventions, section structure, and level of documentation exactly. Do not write "generic good code" — write code that looks like it belongs in this specific codebase.
+
+## Writing And Documentation
+- **Use ASD-STE100 Simplified Technical English (STE)** - Load the `simplified-technical-english` skill before writing or editing project text, including code comments, README files, documents, guides, help text, templates, and project instructions.
+- **Keep comments narrow** - See the `writing-comments` skill for the full rule, including the Go rules on package comments and name narration.
+- **Keep project documents task-focused** - Use short, direct sentences, consistent terminology, and explicit steps. Prefer the repo's existing commands and terms over new wording.
+- **One sentence per line in Markdown** - When producing or editing Markdown, start each sentence on a new line. Do not wrap a sentence across lines, and do not put two sentences on one line. This keeps diffs to the sentence that changed, so a review comment anchors to one idea. Applies to prose and list items. A table row stays on one line, because a cell cannot hold a line break, and code blocks keep their own formatting.
+- **Use the glossary** - When the repo has a `GLOSSARY.md` at its root, it defines the domain terms and verbs. Use each term with the spelling and meaning shown there. Add new domain terms to it in the same change.
+
+## Development Process
+Work from the requirements to the code, in this order.
+Do not start a step until I agree the step before it.
+The system tests are the guide: they show that each user flow does what the requirements promise.
+
+1. **Requirements** - Write the high-level requirements and the user flows that use them.
+   Give each requirement and each flow an ID, so that a test case can name it.
+2. **Functional specification** - For each requirement, describe the behaviour: the inputs, the outputs, the errors, and the edge cases.
+3. **Architecture decisions** - Record each decision and its reason in an ADR before you write the code that depends on it.
+4. **Test case design** - Design the functional and system test cases from the requirements and the user flows.
+   Link each case to the requirements and flows that it verifies.
+   Write the system tests before the implementation where you can.
+5. **Implementation** - Write the code that makes the system tests pass.
+   Add unit tests to check the rules inside the code.
+   A unit test supports a system test, and does not replace it.
+
+- **Keep the trace current** - When a change adds or changes a promise, change its requirement and its test case in the same change.
+- **Scale the process to the change** - For a small fix, update only the steps that the fix changes.
+- **Flag test changes** - If existing tests need modification, highlight this explicitly
+- **Clean Architecture projects** - Use dependency injection and mocks for the unit tests
+
+## Languages & Tools (GitHub / Personal Projects)
+- **Languages**: Go, Bash, PowerShell, JavaScript
+- **Build tool**: Make - drive all commands/tasks through Makefile targets
+- **Version control**: Git and GitHub CLI (prefer `gh api graphql` for CI/PR information)
+
+## Workflow
+
+- **Use Make** (in GitHub repos) - check the `Makefile` for commands before defaulting to other methods.
+- **Always run linters and tests** before considering work complete
+- **Never commit on my behalf** - I review and commit incrementally myself
+- **Incremental progress** - Complete one aspect fully before moving to the next
+
+## VS Code Remote Navigation
+
+- **Use `code --goto` when opening files for me** - Prefer `code -r --goto /abs/path/file:line` over plain file links for reliable cursor jumps in remote VS Code sessions
+- **Navigate one file at a time on request** - When walking through an issue, open one target, wait for confirmation, then move to the next
+- **Prefer `path:line` references in chat** - Provide jump targets as `/abs/path/file:line` so I can paste directly into quick-open or terminal
+- **Create files before opening with `--goto`** - If a file will be newly created, write it to disk first and only then run `code -r --goto /abs/path/file:line` to avoid stale/empty unsaved tabs
+- **Recover from stale editors explicitly** - If an opened tab looks empty or out of sync, close that tab and reopen from disk with `code -r --goto /abs/path/file:line`; if needed use "Compare Active File with Saved"
+
+## GitHub And CI Skills
+
+- **Use `using-github-cli` for GitHub tasks** - For PR checks, reviews, comments, GraphQL queries, and host-aware `gh` workflows
+- **Keep AGENTS as routing policy, keep command details in skills** - Avoid duplicating long command examples here; update the skill docs instead
+
+## Search And Dotfiles
+
+- **Use `rg`, not `grep`**, and **`fd`, not `find`**.
+- **Dotfiles are managed by chezmoi** from `~/.local/share/chezmoi`. Edit the source there, not the file in `$HOME`. Put machine-specific settings in `~/.zshrc.local`, `~/.gitconfig.local`, or `~/.agents/AGENTS.local.md`, never in the repo.
+{{- $local := joinPath .chezmoi.homeDir ".agents/AGENTS.local.md" }}
+{{- if stat $local }}
+
+{{ include $local | trimSuffix "\n" }}
+{{- end }}
