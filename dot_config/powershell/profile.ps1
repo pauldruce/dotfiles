@@ -5,6 +5,7 @@
 
 # 1. Mise Activation
 if (Get-Command mise -ErrorAction SilentlyContinue) {
+    if ($PSVersionTable.PSVersion.Major -lt 7) { $env:MISE_PWSH_CHPWD_WARNING = 0 }
     & mise activate powershell | Out-String | Invoke-Expression
 }
 

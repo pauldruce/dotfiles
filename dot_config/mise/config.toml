@@ -3,10 +3,20 @@
 bat = "latest"
 bottom = "latest"
 chezmoi = "latest"
+delta = "latest"
+dust = "latest"
 eza = "latest"
 fd = "latest"
+fzf = "latest"
+go = "latest"
+jless = { version = "latest", os = ["macos", "linux/x64"] }
 k9s = "latest"
 lazygit = "latest"
 node = "24"
 python = "3.12"
 ripgrep = "latest"
+starship = "latest"
+zoxide = "latest"
+
+[env]
+GOTOOLCHAIN = "local"
