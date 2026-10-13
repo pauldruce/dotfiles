@@ -15,6 +15,14 @@
 	line-numbers = true
 	syntax-theme = OneHalfDark
 	default-language = bash
+	wrap-max-lines = unlimited
+	pager = ov -F --section-delimiter '^(commit|added:|removed:|renamed:|Δ)' --section-header --caption '[Tab] focus file  [n/N] next/prev  [l] file list  [w] wrap  [q] quit'
+	file-style = "bold #cdd6f4"
+	file-decoration-style = "#89b4fa" ul
+	hunk-header-style = "syntax bold"
+	hunk-header-decoration-style = omit
+	hunk-header-file-style = "bold #a6adc8"
+	hunk-header-line-number-style = "bold #fab387"
 [merge]
 	conflictstyle = diff3
 [diff]

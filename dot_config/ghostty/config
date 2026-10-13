@@ -18,3 +18,4 @@ window-inherit-working-directory = true
 copy-on-select = clipboard
 mouse-hide-while-typing = true
 scrollback-limit = 100000
+macos-option-as-alt = left

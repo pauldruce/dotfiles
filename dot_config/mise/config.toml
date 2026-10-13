@@ -1,9 +1,11 @@
 [tools]
+"aqua:noborus/ov" = "latest"
 "aqua:terrastruct/d2" = "latest"
+"asdf:andweeb/asdf-delta" = { version = "0.18.2", os = ["macos/x64"] }
 bat = "latest"
 bottom = "latest"
 chezmoi = "latest"
-delta = "latest"
+delta = { version = "latest", os = ["linux", "windows", "macos/arm64"] }
 dust = "latest"
 eza = "latest"
 fd = "latest"

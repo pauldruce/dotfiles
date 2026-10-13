@@ -1,0 +1,36 @@
+KeyBind:
+  down:
+    - "Enter"
+    - "Down"
+    - "j"
+    - "ctrl+n"
+  up:
+    - "Up"
+    - "k"
+    - "ctrl+p"
+  jump_target:
+    - "alt+j"
+  delimiter:
+    - "F8"
+  page_half_down:
+    - "d"
+    - "ctrl+d"
+  page_half_up:
+    - "u"
+    - "ctrl+u"
+  next_search:
+    - "alt+n"
+  next_backsearch:
+    - "alt+N"
+  next_section:
+    - "space"
+    - "n"
+  previous_section:
+    - "^"
+    - "N"
+  hide_other:
+    - "alt+-"
+    - "tab"
+  sidebar_sections:
+    - "alt+u"
+    - "l"

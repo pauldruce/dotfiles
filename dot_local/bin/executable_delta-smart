@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+# Automatically enable side-by-side if terminal width >= 130 columns
+cols=$(tput cols 2>/dev/null || echo 80)
+if [ "$cols" -ge 130 ]; then
+    exec delta --side-by-side "$@"
+else
+    exec delta "$@"
+fi
