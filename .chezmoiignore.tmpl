@@ -21,3 +21,9 @@ mise.toml
 Documents
 Documents/**
 {{- end }}
+
+# The ponytail plugin installs only on macOS and Linux
+{{- if eq .chezmoi.os "windows" }}
+.codex/local-marketplaces
+.codex/local-marketplaces/**
+{{- end }}

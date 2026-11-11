@@ -49,6 +49,8 @@ This repository manages personal developer dotfiles across macOS, Linux (Raspber
   Each `dot_claude/private_skills/<name>/SKILL.md.tmpl` includes the matching file.
 - Never use the `exact_` prefix on a skills directory.
   Other tools install their own skills there.
+- `.chezmoiscripts/run_onchange_after_install-ponytail.sh.tmpl` installs the ponytail plugin for Claude Code and Codex, at the release in `.chezmoidata/ponytail.toml`.
+  The script holds the `lookPath` result of `claude` and `codex`, so chezmoi runs it again when either CLI appears.
 
 ### 6. Templates
 - Give each template file the `.tmpl` suffix, including each file in `.chezmoitemplates/` and `.chezmoiignore.tmpl`.

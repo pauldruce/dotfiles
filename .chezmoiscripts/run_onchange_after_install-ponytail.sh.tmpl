@@ -1,0 +1,29 @@
+{{ if ne .chezmoi.os "windows" -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo="{{ .ponytail.repo }}"
+release="{{ .ponytail.release }}"
+claude="{{ lookPath "claude" }}"
+codex="{{ lookPath "codex" }}"
+
+if [[ -n "$claude" ]]; then
+  "$claude" plugin marketplace remove ponytail >/dev/null 2>&1 || true
+  "$claude" plugin marketplace add "$repo#$release"
+  "$claude" plugin install ponytail@ponytail
+fi
+
+# At each release tag, the Codex marketplace file of ponytail still installs the
+# plugin from main. So a marketplace that is added with --ref installs main. The
+# local marketplace in ~/.codex/local-marketplaces gives the release tag as
+# the ref of the plugin.
+if [[ -n "$codex" ]]; then
+  "$codex" plugin marketplace add "$HOME/.codex/local-marketplaces/ponytail"
+  "$codex" plugin add ponytail@ponytail
+  echo "ponytail: run codex, open /hooks, and trust the two ponytail hooks."
+fi
+
+if ! command -v node >/dev/null; then
+  echo "ponytail: node is not on the PATH. Each ponytail hook runs node, so the hooks fail until node is on the PATH of Claude Code and Codex." >&2
+fi
+{{ end -}}

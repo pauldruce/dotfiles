@@ -30,6 +30,7 @@ Supports **macOS**, **Linux** (including Raspberry Pi), and **Windows** (WSL2 & 
   * `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` (one set of global agent rules, from `.chezmoitemplates/AGENTS.md.tmpl`)
   * `~/.agents/skills/` and `~/.claude/skills/` (agent skills, from `dot_agents/skills/`)
   * `~/.gemini/config/` (Antigravity global environment rule & chezmoi management skill)
+  * The [ponytail](https://github.com/DietrichGebert/ponytail) plugin for Claude Code and Codex (macOS & Linux), at the release in `.chezmoidata/ponytail.toml`
 
 ---
 
@@ -50,6 +51,10 @@ curl https://mise.run | sh
 ```
 
 Open a new terminal to get the starship prompt.
+
+If Claude Code or Codex is on the PATH, `chezmoi apply` also installs the ponytail plugin for it.
+If you install one of them later, run `chezmoi apply` again.
+Then run `codex`, open `/hooks`, and trust the two ponytail hooks.
 
 ### Windows (PowerShell)
 
@@ -125,6 +130,11 @@ Keep it local, because the patterns themselves are private.
   ```bash
   chezmoi apply
   ```
+* **Move ponytail to a newer release**: set `release` in `.chezmoidata/ponytail.toml` to the new tag, then apply:
+  ```bash
+  chezmoi apply
+  ```
+  Then run `codex`, open `/hooks`, and trust the changed ponytail hooks.
 * **Commit and push updates to GitHub**:
   ```bash
   chezmoi cd
